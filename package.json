@@ -1,0 +1,14 @@
+{
+  "name": "wheater-api",
+  "version": "1.0.0",
+  "description": "Example of weather API",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Michele Menciassi <m.menciassi@gmail.com> (https://github.com/zauker)",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
