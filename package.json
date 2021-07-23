@@ -9,7 +9,8 @@
     "build": "tsc",
     "prestart": "npm run build",
     "start": "node dist/index.js",
-    "test": "NPM_ENV=test mocha --check-leaks -r tsconfig-paths/register -r ts-node/register 'test/**/*.spec.ts' --recursive"
+    "test": "NPM_ENV=test mocha --check-leaks -r tsconfig-paths/register -r ts-node/register 'src/test/**/*.spec.ts' --recursive",
+    "coverage": "nyc npm run test"
   },
   "author": "Michele Menciassi <m.menciassi@gmail.com> (https://github.com/zauker)",
   "license": "ISC",
@@ -33,6 +34,7 @@
     "eslint-config-google": "^0.14.0",
     "mocha": "^9.0.2",
     "nodemon": "^2.0.12",
+    "nyc": "^15.1.0",
     "supertest": "^6.1.4",
     "ts-node": "^10.1.0",
     "tsconfig-paths": "^3.10.1",
