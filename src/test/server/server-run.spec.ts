@@ -4,7 +4,7 @@ import createServer from 'app/server';
 
 const app = createServer();
 
-describe('server checks', () => {
+describe('Server checks', () => {
   it('server is created without error', (done) => {
     request(app)
     .get("/")
