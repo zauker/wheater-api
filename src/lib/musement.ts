@@ -16,8 +16,8 @@ export interface City {
   meta_description: string;
   more: string;
   weight: number;
-  latitude: 48.866;
-  longitude: 2.355;
+  latitude: number;
+  longitude: number;
   country: Country;
   cover_image_url: string; // URL Type?
   url: string; // URL Type?
