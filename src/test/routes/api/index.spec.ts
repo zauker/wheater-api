@@ -4,30 +4,51 @@ import createServer from 'app/server';
 
 const app = createServer();
 
-import Ajv from 'ajv';
-const ajv = new Ajv();
-
-import citySchema from 'test/schema/city.schema'
-const validateCity = ajv.compile(citySchema);
-
-import forecastSchema from 'test/schema/forecast.schema';
-const validateForecast = ajv.compile(forecastSchema);
-
 describe('API route', () => {
-  it('/api/forecast responds with 200 and right content type', async () => {
-    let result = await request(app)
-    .get("/api/forecast")
-    .expect(200);
+  it('/api/forecast call withoud params', async () => {
+    const result = await request(app)
+    .get("/api/forecast");
 
+    expect(result.status).be.equal(200);
     expect(result.headers['content-type']).to.equal('application/json; charset=utf-8');    
     expect(result.body).to.be.an('array');
     result.body.forEach((element:any) => {
+
       expect(element).to.be.an('object');
       expect(element).have.property('city');
       expect(element).have.property('forecast');
 
-      expect(validateForecast(element.forecast)).to.be.equal(true);
-      expect(validateCity(element.city)).to.be.equal(true);
+      expect(element.forecast).to.be.an('array');
+      expect(element.city).to.be.a('string');
+      element.forecast.forEach( (forecast:any) => {
+        expect(forecast).to.be.a('string');        
+      });
     });
   }).timeout(10000);
+
+  it('/api/forecast with content type text/plain', async () => {
+    const result = await request(app)
+    .get("/api/forecast")
+    .set('Content-type', 'text/plain');
+
+    expect(result.status).be.equal(200);
+    expect(result.headers['content-type']).to.equal('text/plain; charset=utf-8');    
+    expect(result.text).to.be.an('string').and.not.be.empty;
+    // TODO - check the format of each rows with a regex
+    
+  }).timeout(10000);
+
+  it('/api/forecast with content type text/html', async () => {
+    const result = await request(app)
+    .get("/api/forecast")
+    .set('Content-type', 'text/html')
+    .query({ limit: 2 });
+
+    expect(result.status).be.equal(200);
+    expect(result.headers['content-type']).to.equal('text/html; charset=utf-8');    
+    expect(result.text).to.be.an('string').and.not.be.empty;
+    // TODO - check the format of each rows with a regex
+    
+  }).timeout(10000);
+
 });

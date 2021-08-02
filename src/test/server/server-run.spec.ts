@@ -1,5 +1,4 @@
 import request from 'supertest';
-import { expect } from 'chai';
 import createServer from 'app/server';
 
 const app = createServer();

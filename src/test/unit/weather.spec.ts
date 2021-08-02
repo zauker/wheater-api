@@ -32,7 +32,7 @@ describe('WeatherService - without params', () => {
     expect(validateForecast(forecast)).to.be.equal(true);
   });
 
-});
+}).timeout(10000);
 
 describe('WeatherService - with format XML', () => {
 
@@ -42,7 +42,7 @@ describe('WeatherService - with format XML', () => {
     expect(forecast).xml.to.be.valid();
   });
 
-});
+}).timeout(10000);
 
 describe('WeatherService - with format JSON and days param', () => {
 
@@ -61,4 +61,4 @@ describe('WeatherService - with format JSON and days param', () => {
     expect(validateForecast(forecast)).to.be.equal(true);
   });
 
-});
+}).timeout(10000);

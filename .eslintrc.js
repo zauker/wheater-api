@@ -5,7 +5,9 @@ module.exports = {
     'es2021': true,
   },
   'extends': [
-    'google',
+    "eslint:recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended"
   ],
   'parser': '@typescript-eslint/parser',
   'parserOptions': {
