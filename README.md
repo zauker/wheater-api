@@ -55,17 +55,11 @@ project
 
 ## Getting Started
 
-To get a local copy up and running follow these simple steps.
+You can run the project directly or better under docker container.
 
 ### Prerequisites
 
-This is an example of how to list things you need to use the software and how to install them.
-
-* npm
-
-  ```sh
-  npm install npm@latest -g
-  ```
+Obviously Node and npm installation is mandatory, the project use the LTS version 14.17.3 and npm version 7.20.1, check if Node is rightly installed, it could be useful use NVM to guarantee the use of the right version of Node and avoid issues dues to the use of a different version.
 
 ### Installation
 
@@ -81,15 +75,210 @@ This is an example of how to list things you need to use the software and how to
    npm install
    ```
 
+3. Set Environment
+
+   Before run the project you have to set the environment vars.
+   The base URL of the APIs are without protocol, ideally you could use a different protocol (http/https), when the protocol is not specified https will be used.
+   For weather API you have to set a key too.
+
+   The API route could perform a call to a limit number of cities, or for a certain number of a forecast days, language could be setted too (so the name of cities and weather condition descriptions will be served in the required language).
+
+   The values setted in env vars is used as default setting and used if any params are passed with the call.
+
+   These value is used also to perform test, if necessary we could set a different environment set for test purpose.
+
+   PORT is the port number of the express server, EXPOSE_PORT is the port mapped on it on Docker container.
+
+   ```.env
+   MUSEMENT_API_BASE_URL=sandbox.musement.com/api/v3/
+   WEATHER_API_BASE_URL=api.weatherapi.com/v1/
+   WEATHER_API_AUTH_KEY=**your-key-here**
+
+   DEFAULT_CITY_LIMIT=
+   DEFAULT_FORECAST_DAYS=2
+   DEFAULT_LANG=en
+
+   PORT=3000
+   EXPOSE_PORT=3000
+   ```
+
 ## Usage
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
+### local run
 
-_For more examples, please refer to the [Documentation](https://example.com)_
+You can run the application locally without using Docker. This is an overview of command setted in script section of package.json.
+
+* __lint__ : run linter for code analysis
+* __test__ : perform tests
+* __coverage__ : perform tests and check the coverage of testing code
+* __build__ : build the source typescript code to javascript
+* __dev__ : run the application in development mode, the code in src folder are in watch and app restart when updates occurred.
+* __start__ : run the built application
+
+So you can start the application run the command:
+
+```sh
+npm run dev
+```
+
+or the following
+
+```sh
+npm run build
+npm run start
+```
+
+### Docker run
+
+For Docker we use docker-compose that set one container called `weather-api`.
+
+We have to different setting for Dev and Prod environment.
+
+Docker build use the `.env` variables for building the container, in this step only `PORT` and `EXPOSE_PORT` are used. The other environment variables are setted inside the container.
+You could override the value of env vars setted in the container using specific .env files.
+
+* __.env.dev__ : is used in development configuration
+* __.env.prod__ : is used in production configuration
+
+Build dev
+
+```sh
+docker-compose -f docker-compose.yml -f docker-compose.dev.yml build 
+```
+
+Run dev
+
+```sh
+docker-compose -f docker-compose.yml -f docker-compose.dev.yml up
+```
+
+Build prod
+
+```sh
+docker-compose -f docker-compose.yml -f docker-compose.prod.yml build 
+```
+
+Run prod
+
+```sh
+docker-compose -f docker-compose.yml -f docker-compose.prod.yml up
+```
+
+The Development container run the command `npm run dev` so the application start in watch mode. The Production container run the `npm run start` the container has not src and test folder and dev-dependencies installed.
+
+## CLI reference
+
+The CLI command return only a text/plain response in console log.
+
+It doesn't handle argvs but it take the setted default value of limit, days and lang from ENV setting.
+
+Run as develop mode (right from TS)
+
+```sh
+nodemon -r tsconfig-paths/register src/cli/forecast.ts
+```
+
+Run from built (using node)
+
+```sh
+node dist/cli/forecast.js
+```
+
+Override .env setting
+
+```sh
+DEFAULT_CITY_LIMIT=5 nodemon -r tsconfig-paths/register src/cli/forecast.ts
+```
+
+or
+
+```sh
+DEFAULT_CITY_LIMIT=5 node dist/cli/forecast.js
+```
+
+
+
+## API reference
+
+### forecast
+
+Method: __GET__
+
+URL: __/api/forecast__
+
+Full url example: __[http://localhost:3000/api/forecast](http://localhost:3000/api/forecast)__
+
+Request Params
+
+* limit
+  * description: limit the number of cities retrieved
+  * type: integer
+  * default value: 0 (is setted via .env)
+  * required: false
+
+* days
+  * description: number of day of forecast data
+  * type: integer
+  * default value: 2 (is setted via .env)
+  * required: false
+
+* lang
+  * description: set the lang to localize data values
+  * type: string
+  * default value: en (is setted via .env)
+  * required: false
+
+#### Responses
+
+* 200 Ok
+  * application/json
+
+    ```json
+    {
+      "city": "Rome",
+      "forecast": [
+        "Partly cloudy",
+        "Moderate rain"
+      ]
+    }
+    ```
+
+  * text/plain
+
+    ```text
+    Processed city Amsterdam | Patchy rain possible, Patchy rain possible<br>\n
+    Processed city Paris | Patchy rain possible, Patchy rain possible<br>\n
+    Processed city Rome | Partly cloudy, Partly cloudy<br>\n
+    ```
+
+  * text/html
+
+    ```text
+    Processed city Amsterdam | Patchy rain possible, Patchy rain possible\n
+    Processed city Paris | Patchy rain possible, Patchy rain possible\n
+    Processed city Rome | Partly cloudy, Partly cloudy\n
+    ```
+
+* 503 Service Unavailable
+  * text/html
+
+    ```text
+    Service Unavailable
+    ```
 
 ## Roadmap
 
 See the [open issues](https://github.com/zauker/wheater-api/issues) for a list of proposed features (and known issues).
+
+Add params validator with Express Validator.
+
+Add argvs handling in CLI script.
+
+Localize also the statement `Processed city` on responses.
+
+We should consider to introduce a Redis caching system to reduce the use of external API, it improves the performance and might be useful in case of API with a free tier quota or pay per use formula.
+
+We should consider to introduce a mock server for testing external API, in this way test are faster and API doesn't consume the free tier quota for testing.
 
 ## License
 
