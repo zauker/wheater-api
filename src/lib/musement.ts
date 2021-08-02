@@ -67,7 +67,7 @@ export default class MusementService implements MusementServiceInterface {
 
   public async getCities(params?: CityParams, headers?:CityRequestParams):Promise<City[]> {
     try {
-      let requestHeaders: any = {};
+      const requestHeaders: any = {};
       if (headers && headers.version){
         requestHeaders['X-Musement-Version'] = headers.version;
       }

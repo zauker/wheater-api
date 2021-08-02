@@ -1,12 +1,12 @@
-import express, { Application, Request, Response, NextFunction } from "express";
-import routes from "app/routes/index";
+import express, { Application, Request, Response } from "express";
+import routes from "./routes/index";
 
-export default function createServer() {
+export default function createServer():Application {
   const app: Application = express();
   app.disable('x-powered-by');
 
-  app.get("/", (req: Request, res: Response, next: NextFunction) => {
-    res.send('Hello Typescript!');
+  app.get("/", (req: Request, res: Response) => {
+    res.status(200).send('<!-- silence is golden -->');
   });
 
   app.use(routes);

@@ -156,14 +156,12 @@ export default class WeatherService implements WeatherServiceInterface{
 
   public async forecast(params: ForecastParams) {
     const url = `${this.protocol}://${this.baseUrl.replace(/\/?$/, '/')}forecast.${this.format}`;
-    // let url = `${this.protocol}://${this.baseUrl}`; // set protocol and base url
-    // url.replace(/\/?$/, '/'); // check if trailing slash is present
-    // url += `forecast.${this.format}`; // add service andpoint with right format
-    let getParams = Object.assign(params,{ key: this.key });
+    const getParams = Object.assign(params,{ key: this.key });
     try {
       const response: AxiosResponse<WeatherForecastResponse> = await axios.get(url, {params: getParams});
       return response.data;
     } catch (error) {
+      console.log(error);
       throw error;
     }
   }
