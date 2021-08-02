@@ -10,6 +10,8 @@ class ApiController {
     const weatherApiBaseUrl:string = process.env.WEATHER_API_BASE_URL || "";
     const weatherApiKey:string = process.env.WEATHER_API_AUTH_KEY || "";
   
+    // TODO - params validation with express validator module
+    
     // set params
     const cityLimit: number | undefined = req.query.limit ? parseInt(<string>req.query.limit) : process.env.DEFAULT_CITY_LIMIT ? parseInt(process.env.DEFAULT_CITY_LIMIT) : undefined;
     const lang: string | undefined = <string>req.query.lang || process.env.DEFAULT_LANG || undefined;
@@ -27,15 +29,19 @@ class ApiController {
 
       switch (req.headers['content-type']) {
         case 'text/plain':
+console.log('text/plain');
           res.setHeader('content-type', 'text/plain').send(FormatterTextPlain.format(cityForecastList));
           break;
         case 'text/html':
+console.log('text/html');
           res.setHeader('content-type', 'text/html').send(FormatterTextHtml.format(cityForecastList));
           break;    
         default:
+console.log('application/json');
           res.setHeader('content-type', 'application/json').send(FormatterJson.format(cityForecastList));
       }
     } catch (error) {
+      console.error(error.message);
       res.status(503).send('Service Unavailable');
     }
     
