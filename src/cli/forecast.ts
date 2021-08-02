@@ -8,6 +8,11 @@ async function init(){
   const weatherApiBaseUrl:string = process.env.WEATHER_API_BASE_URL || "";
   const weatherApiKey:string = process.env.WEATHER_API_AUTH_KEY || "";
 
+  // set params
+  const cityLimit: number | undefined = process.env.DEFAULT_CITY_LIMIT ? parseInt(process.env.DEFAULT_CITY_LIMIT) : undefined;
+  const lang: string | undefined = process.env.DEFAULT_LANG || undefined;
+  const forecastDays: number | undefined = process.env.DEFAULT_FORECAST_DAYS ? parseInt(process.env.DEFAULT_FORECAST_DAYS) : undefined;
+  
   try {
     // instance musement service
     const ms = new MusementService(musementApiBaseUrl);
@@ -16,7 +21,7 @@ async function init(){
     const ws = new WeatherService(weatherApiBaseUrl, {key: weatherApiKey});
     
     // we get the list of the cities with their own forecast data
-    const cityForecastList = await CityForecastUtil.builder(ms, ws, {cityLimit: 10, lang: 'it', forecastDays: 2});
+    const cityForecastList = await CityForecastUtil.builder(ms, ws, {cityLimit: cityLimit, lang: lang, forecastDays: forecastDays});
 
     // // we display the formatted data in console
     console.log(FormatterTextPlain.format(cityForecastList));
