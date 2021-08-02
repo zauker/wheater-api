@@ -1,7 +1,7 @@
 import {Request, Response} from 'express';
-import MusementService from 'lib/musement';
-import WeatherService from 'lib/weather';
-import CityForecastUtil, { CityForecast, FormatterPlain } from 'lib/forecast';
+import MusementService from '../../lib/musement';
+import WeatherService from '../../lib/weather';
+import CityForecastUtil, { CityForecast, FormatterTextPlain, FormatterTextHtml, FormatterJson } from '../../lib/forecast';
 
 
 class ApiController {
@@ -23,20 +23,17 @@ class ApiController {
       const ws = new WeatherService(weatherApiBaseUrl, {key: weatherApiKey});
       
       // we get the list of the cities with their own forecast data
-      let cityForecastList: CityForecast[] = await CityForecastUtil.builder(ms, ws, {cityLimit: cityLimit, lang: lang, forecastDays: forecastDays});
+      const cityForecastList: CityForecast[] = await CityForecastUtil.builder(ms, ws, {cityLimit: cityLimit, lang: lang, forecastDays: forecastDays});
 
-      let cityForecastPlainList: string[];
       switch (req.headers['content-type']) {
         case 'text/plain':
-          cityForecastPlainList = FormatterPlain.format(cityForecastList);
-          res.setHeader('content-type', 'text/plain').send(cityForecastPlainList.join("\n"));
+          res.setHeader('content-type', 'text/plain').send(FormatterTextPlain.format(cityForecastList));
           break;
         case 'text/html':
-          cityForecastPlainList = FormatterPlain.format(cityForecastList);
-          res.setHeader('content-type', 'text/html').send(cityForecastPlainList.join("<br>\n"));
+          res.setHeader('content-type', 'text/html').send(FormatterTextHtml.format(cityForecastList));
           break;    
         default:
-          res.json(cityForecastList);
+          res.setHeader('content-type', 'application/json').send(FormatterJson.format(cityForecastList));
       }
     } catch (error) {
       res.status(503).send('Service Unavailable');
