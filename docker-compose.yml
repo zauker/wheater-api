@@ -1,0 +1,7 @@
+version: '3.8'
+
+services:
+  weather-api:
+    container_name: weather-api
+    ports:
+      - ${EXPOSE_PORT}:${PORT}

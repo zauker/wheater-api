@@ -1,0 +1,12 @@
+version: "3.8"
+
+services:
+  weather-api:
+    container_name: weather-api
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+    env_file: .env.prod
+    environment:
+      - NODE_ENV=production

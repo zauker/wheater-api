@@ -1,0 +1,14 @@
+version: "3.8"
+
+services:
+  weather-api:
+    container_name: weather-api
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ./src:/home/node/app/src
+    env_file: .env.dev
+    environment:
+      - NODE_ENV=development
+  
