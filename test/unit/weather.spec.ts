@@ -2,7 +2,7 @@ import "dotenv/config";
 import { expect } from "chai";
 import chaiXml from 'chai-xml';
 import Ajv from 'ajv';
-import WeatherService, { WeatherForecastResponse } from "lib/weather";
+import WeatherService, { WeatherForecastResponse } from "../../src/app/lib/weather";
 
 const ajv = new Ajv();
 const chai = require('chai');
@@ -10,7 +10,7 @@ chai.use(chaiXml);
 const weatherApiBaseUrl:string = process.env.WEATHER_API_BASE_URL || "";
 const weatherApiKey:string = process.env.WEATHER_API_AUTH_KEY || "";
 
-import forecastSchema from 'test/schema/forecast.schema';
+import forecastSchema from '../schema/forecast.schema';
 const validateForecast = ajv.compile(forecastSchema);
 
 let forecast: WeatherForecastResponse;

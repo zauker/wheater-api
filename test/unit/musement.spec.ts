@@ -2,14 +2,14 @@ import "dotenv/config";
 import { expect } from "chai";
 import chaiXml from 'chai-xml';
 import Ajv from 'ajv';
-import MusementService, { City } from "lib/musement";
+import MusementService, { City } from "../../src/app/lib/musement";
 let cities:City[];
 const ajv = new Ajv();
 const chai = require('chai');
 chai.use(chaiXml);
 const musementApiBaseUrl:string = process.env.MUSEMENT_API_BASE_URL || "";
 
-import citySchema from 'test/schema/city.schema'
+import citySchema from '../schema/city.schema'
 const validateCity = ajv.compile(citySchema);
 
 describe('MusementService - without params', () => {
