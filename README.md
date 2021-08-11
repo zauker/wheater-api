@@ -10,9 +10,10 @@ The application could be run directly using package scripts or using Docker cont
 ### Structure
 
 The project root is under `/src` folder, the target for built application is `/dist` folder and obviously the folder `/test` is used to perform unit and integration tests.
-On `/src` folder you can find the mail file `index.ts` and all others files of the application under the folder `/app`.
+On `/src` folder you can find the mail file `index.ts` and all others files of the application under the folder `app`.
 The folders of the application are divided per role, routes, controllers, cli and lib.
-The common libraries are under `/lib` folder, the `/cli` folder contains all script that could be executed outside the application directly in Command Line Interface (CLI).
+The common libraries are under `lib` folder, the `cli` folder contains all script that could be executed outside the application directly in Command Line Interface (CLI).
+Additional documentation could be placed on `/docs` folder.
 
 ```#ascii
 project
@@ -44,7 +45,9 @@ project
 ├─test
 │   │   index.ts
 │   
-└───dist
+├────dist
+│
+└────docs
 ```
 
 ### Built With
@@ -283,6 +286,10 @@ Localize also the statement `Processed city` on responses.
 We should consider to introduce a Redis caching system to reduce the use of external API, it improves the performance and might be useful in case of API with a free tier quota or pay per use formula.
 
 We should consider to introduce a mock server for testing external API, in this way test are faster and API doesn't consume the free tier quota for testing.
+
+### New routes
+
+We plan to build new routes to store and retrieve city/forecast data. All information and documentation about this task are under `docs/new-api` folder.
 
 ## License
 

@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- docs folder
+
 ### Changed
 
 - Moved src/test folder. Put test folder outside /src.

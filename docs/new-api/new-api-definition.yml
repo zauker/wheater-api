@@ -1,0 +1,170 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Jagaad Test
+  description: Backend Node.js tech homework
+servers:
+  - url: 'http://localhost:3000/api/v3'
+    description: "Local development server"
+  - url: "https://sandbox.musement.com/api/v3"
+    description: "Sandbox server"
+  - url: "https://api.musement.com/api/v3"
+    description: "Production server"
+
+paths:
+  /cities/{id}/forecast:
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+          example: 2
+        required: true
+        description: The city ID.
+    post:
+      summary: 'Save forecast data for a certain city'
+      tags:
+        - forecast
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: Payload
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SimpleForecast'
+            example:
+              - day: '2021-12-01'
+                description: Sunny
+              - id: '2021-12-02'
+                description: Partly cloudy
+      responses:
+        '201':
+          description: 'Created'
+        '400':
+          description: 'Bad request. city ID or Payload are wrong or missed'
+        '401':
+          description: 'Authorization information is missing or invalid.'
+        '404':
+          description: 'A city with the specified ID was not found.'
+        '500':
+          description: 'Unexpected error.'
+
+  /cities/{id}/forecast/today:
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+          example: 2
+        required: true
+        description: The city ID.
+    get:
+      summary: 'Retrieve today weather condition for a city'
+      tags:
+        - forecast
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleForecast'
+              example:
+                - day: '2021-12-02'
+                  description: 'Partly cloudy'
+          description: 'OK'
+        '400':
+          description: 'Bad request. city ID is in a wrong format'
+        '404':
+            description: 'A city with the specified ID was not found or has no forecast data.'
+        '500':
+            description: 'Unexpected error.'
+
+  /cities/{id}/forecast/tomorrow:
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+          example: 2
+        required: true
+        description: The city ID.
+    get:
+      summary: 'Retrieve tomorrow weather condition for a city'
+      tags:
+        - forecast
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleForecast'
+              example:
+                - day: '2021-12-02'
+                  description: 'Partly cloudy'
+          description: 'OK'
+        '400':
+          description: 'Bad request. city ID is in a wrong format'
+        '404':
+            description: 'A city with the specified ID was not found or has no forecast data.'
+        '500':
+            description: 'Unexpected error.'
+  /cities/{id}/forecast/day/{day}:
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+          example: 2
+        required: true
+        description: The city ID.
+      - in: path
+        name: day
+        schema:
+          type: string
+          format: date
+          example: '2017-12-02'
+        required: true
+        description: The day of forecast request.
+    get:
+      summary: 'Retrieve weather condition for a city for a certain day'
+      tags:
+        - forecast
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleForecast'
+              example:
+                - day: '2021-12-02'
+                  description: 'Partly cloudy'
+          description: 'OK'
+        '400':
+          description: 'Bad request. city ID or Day are in a wrong format'
+        '404':
+            description: 'A city with the specified ID was not found or has no forecast data.'
+        '500':
+            description: 'Unexpected error.'
+ 
+components:
+  schemas:
+    SimpleForecast:
+      type: object
+      required:
+        - day
+        - description
+      properties:
+        day:
+          type: string
+          format: date
+          example: '2021-12-01'
+        description:
+          type: string
+          example: 'Sunny'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
