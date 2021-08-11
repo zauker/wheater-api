@@ -64,6 +64,8 @@ You can run the project directly or better under docker container.
 
 Obviously Node and npm installation is mandatory, the project use the LTS version 14.17.3 and npm version 7.20.1, check if Node is rightly installed, it could be useful use NVM to guarantee the use of the right version of Node and avoid issues dues to the use of a different version.
 
+You have to provide an API Key for the Weather API, if you have no one you can register an account on [this page](https://www.weatherapi.com/signup.aspx) and get one.
+
 ### Installation
 
 1. Clone the repo
@@ -78,7 +80,7 @@ Obviously Node and npm installation is mandatory, the project use the LTS versio
    npm install
    ```
 
-3. Set Environment
+3. Set Environment (standalone run)
 
    Before run the project you have to set the environment vars.
    The base URL of the APIs are without protocol, ideally you could use a different protocol (http/https), when the protocol is not specified https will be used.
@@ -90,7 +92,7 @@ Obviously Node and npm installation is mandatory, the project use the LTS versio
 
    These value is used also to perform test, if necessary we could set a different environment set for test purpose.
 
-   PORT is the port number of the express server, EXPOSE_PORT is the port mapped on it on Docker container.
+   PORT is the port number of the express server
 
    ```.env
    MUSEMENT_API_BASE_URL=sandbox.musement.com/api/v3/
@@ -102,8 +104,44 @@ Obviously Node and npm installation is mandatory, the project use the LTS versio
    DEFAULT_LANG=en
 
    PORT=3000
-   EXPOSE_PORT=3000
    ```
+
+   There is a `.env.sample` that you can use.
+
+4. Set Environment (docker run)
+
+   For Docker run you have to set three .env file, on the project you can find three sample .env files that you easily copy and customize. To run the project you have only to provide a valid weather API key.
+
+   The approach with .env is different the directly use of the app (without docker).
+
+   Run app directly is a possibility but we suppose in next future could be mandatory (or simply easier) using only docker container.
+
+   If we introduce in the project other services like Redis or MongoDB for example, run Docker will provide the entire development enviroiment with all needed services.
+
+   `Dockerfile` and `docker-compose` configuration files use the file .env for customize docker configurations.
+
+   For example in configuration we can find this setting
+
+   ```yaml
+    ports:
+      - ${EXPOSE_PORT}:${PORT}
+   ```
+
+   EXPOSE_PORT (public port of container) and PORT (running port on container) are retrieved from .env file.
+
+   We have two specific enviroinment docker-compose configuration both for dev and prod.
+
+   All the enviroimnet setting for produtione are read from specific file `.env.prod` and the same is for development that use the file `.env.dev`.
+
+   In this case we can set the dev and production enviroiment with properly values (sandbox api for dev for example).
+
+   In this per enviroment files we expect the params MUSEMENT_API_BASE_URL, WEATHER_API_BASE_URL and WEATHER_API_AUTH_KEY to run calls to external APIs.
+
+   DEFAULT_CITY_LIMIT, DEFAULT_FORECAST_DAYS, and DEFAULT_LANG are optional params, if provided they are assumed as default value on external APIs' calls.
+
+   For example DEFAULT_FORECAST_DAYS is setted to 2, this means if a call to the app route '/forecast' without any additiona params provide forecast data for next two days.
+
+   If this param is not setted the api perform a call and provide the number of forecast data provided by the external Weather API.
 
 ## Usage
 
@@ -220,19 +258,19 @@ Request Params
 * limit
   * description: limit the number of cities retrieved
   * type: integer
-  * default value: 0 (is setted via .env)
+  * default value: 0 (is setted via environment)
   * required: false
 
 * days
   * description: number of day of forecast data
   * type: integer
-  * default value: 2 (is setted via .env)
+  * default value: 2 (is setted via environment)
   * required: false
 
 * lang
   * description: set the lang to localize data values
   * type: string
-  * default value: en (is setted via .env)
+  * default value: en (is setted via environment)
   * required: false
 
 #### Responses
