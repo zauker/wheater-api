@@ -9,10 +9,10 @@ The application could be run directly using package scripts or using Docker cont
 
 ### Structure
 
-The project root is under `/src` folder and the target for built application is `/dist` folder.
-The content of `/src` is divided under that criteria, `/app` contains the structure of the application that provide an Express server to serve the API.
-The `/cli` folder contains all script that could be executed outside the application directly in Command Line Interface (CLI).
-The common libraries are under `/lib` folder, and obviously the folder `/test` is used to perform unit and integration tests.  
+The project root is under `/src` folder, the target for built application is `/dist` folder and obviously the folder `/test` is used to perform unit and integration tests.
+On `/src` folder you can find the mail file `index.ts` and all others files of the application under the folder `/app`.
+The folders of the application are divided per role, routes, controllers, cli and lib.
+The common libraries are under `/lib` folder, the `/cli` folder contains all script that could be executed outside the application directly in Command Line Interface (CLI).
 
 ```#ascii
 project
@@ -23,26 +23,26 @@ project
 ├────src
 │   │   index.ts
 │   │
-│   ├─app
-│   │   │   server.ts
-│   │   │
-│   │   ├─controllers
-│   │   │   │   api.controller.ts
-│   │   │
-│   │   ├─routes  
-│   │      │   index.ts
-│   │      │   api.ts
-│   │ 
-│   ├─cli
-│   │   │   forecast.ts
-│   │   
-│   ├─lib
-│   │   │   forecast.ts
-│   │   │   musement.ts
-│   │   │   weather.ts
-│   │ 
-│   └─test
-│       │   index.ts
+│   └─app
+│       │   server.ts
+│       │
+│       ├─controllers
+│       │   │   api.controller.ts
+│       │
+│       ├─routes  
+│       │   │   index.ts
+│       │   │   api.ts
+│       │ 
+│       ├─cli
+│       │   │   forecast.ts
+│       │   
+│       └─lib
+│           │   forecast.ts
+│           │   musement.ts
+│           │   weather.ts
+│    
+├─test
+│   │   index.ts
 │   
 └───dist
 ```
@@ -175,28 +175,32 @@ It doesn't handle argvs but it take the setted default value of limit, days and 
 Run as develop mode (right from TS)
 
 ```sh
-nodemon -r tsconfig-paths/register src/cli/forecast.ts
-```
-
-Run from built (using node)
-
-```sh
-node dist/cli/forecast.js
-```
-
-Override .env setting
-
-```sh
-DEFAULT_CITY_LIMIT=5 nodemon -r tsconfig-paths/register src/cli/forecast.ts
+nodemon -r tsconfig-paths/register src/app/cli/forecast.ts
 ```
 
 or
 
 ```sh
-DEFAULT_CITY_LIMIT=5 node dist/cli/forecast.js
+npx ts-node -r tsconfig-paths/register src/app/cli/forecast.ts
 ```
 
+Run from built (using node)
 
+```sh
+node dist/app/cli/forecast.js
+```
+
+Override .env setting
+
+```sh
+DEFAULT_CITY_LIMIT=5 nodemon -r tsconfig-paths/register src/app/cli/forecast.ts
+```
+
+or
+
+```sh
+DEFAULT_CITY_LIMIT=5 node dist/app/cli/forecast.js
+```
 
 ## API reference
 

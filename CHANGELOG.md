@@ -9,7 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Moved test folder. Put test folder outside /src.
+- Moved src/test folder. Put test folder outside /src.
+- Moved src/lib folder. Put lib folder inside app.
+- Moved src/cli folder. Put cli folder inside /app.
 
 ## [1.0.0] - 02/08/2021
 

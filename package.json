@@ -8,7 +8,7 @@
     "dev": "NODE_ENV=dev nodemon -r tsconfig-paths/register src/index.ts",
     "build": "tsc",
     "start": "node dist/index.js",
-    "test": "NPM_ENV=test mocha --check-leaks -r tsconfig-paths/register -r ts-node/register 'src/test/**/*.spec.ts' --recursive",
+    "test": "NPM_ENV=test mocha --check-leaks -r tsconfig-paths/register -r ts-node/register 'test/**/*.spec.ts' --recursive",
     "coverage": "nyc npm run test"
   },
   "author": "Michele Menciassi <m.menciassi@gmail.com> (https://github.com/zauker)",

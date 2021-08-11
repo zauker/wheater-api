@@ -21,7 +21,7 @@ COPY package.json ./
 
 RUN npm install --only=production
 
-RUN echo test >> .dockerignore
+#RUN echo test >> .dockerignore
 
 COPY --from=0 /home/node/app/dist ./dist
 

@@ -1,7 +1,7 @@
 import {Request, Response} from 'express';
-import MusementService from '../../lib/musement';
-import WeatherService from '../../lib/weather';
-import CityForecastUtil, { CityForecast, FormatterTextPlain, FormatterTextHtml, FormatterJson } from '../../lib/forecast';
+import MusementService from '../lib/musement';
+import WeatherService from '../lib/weather';
+import CityForecastUtil, { CityForecast, FormatterTextPlain, FormatterTextHtml, FormatterJson } from '../lib/forecast';
 
 
 class ApiController {
